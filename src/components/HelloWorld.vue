@@ -32,21 +32,7 @@ const isSubmitting = ref(false)
 
 // Implementation Packages (باقات التنفيذ)
 const implementationPackages = ref([
-  {
-    name: '🎨 تصميم داخلي',
-    price: 1.500,
-    currency: 'ر.ع',
-    desc: 'تصميم داخلي احترافي مع كامل الخرائط',
-    icon: '🎨',
-    features: [
-      'تصميم داخلي 3D مع مرتين تعديل',
-      'خرائط توزيع الكهرباء',
-      'خرائط توزيع الاثاث',
-      'خرائط تفاصيل الديكور',
-      'خرائط وجداول المواد المستخدمه في الديكور',
-      'توزيع الإناره للطابقين وتوضيح أنواع الانارات المستخدمه'
-    ]
-  },
+  
   {
     name: '🏠 تنفيذ الأسقف (كامل البيت)',
     price: 5.950,
@@ -195,6 +181,21 @@ const services = ref([
     note: 'خارج مسقط وبركاء: 95 ر.ع',
     needsMeters: false
   },
+  {
+    name: '🎨 تصميم داخلي (3d) ثلاثي الابعاد ',
+    price: 3,
+    currency: 'ر.ع',
+    desc: 'تصميم داخلي احترافي مع كامل الخرائط',
+    icon: '🎨',
+    features: [
+      'تصميم داخلي 3D مع مرتين تعديل',
+      'خرائط توزيع الكهرباء',
+      'خرائط توزيع الاثاث',
+      'خرائط تفاصيل الديكور',
+      'خرائط وجداول المواد المستخدمه في الديكور',
+      'توزيع الإناره للطابقين وتوضيح أنواع الانارات المستخدمه'
+    ]
+  },
   { 
     name: '🗺️تصميم حدائق و لاند سكيب', 
     price: .500, 
@@ -205,18 +206,18 @@ const services = ref([
     needsMeters: true,
     pricePerMeter: 1
   },
+  // { 
+  //   name: '🎨 تصميم ثلاثي الأبعاد', 
+  //   price: 3, 
+  //   currency: 'ر.ع',
+  //   desc: 'تصاميم واقعية ثلاثية الأبعاد',
+  //   icon: '🎨',
+  //   features: ['3 ريال للمتر', 'تصاميم احترافية', 'معاينة واقعية'],
+  //   needsMeters: true,
+  //   pricePerMeter: 3
+  // },
   { 
-    name: '🎨 تصميم ثلاثي الأبعاد', 
-    price: 3, 
-    currency: 'ر.ع',
-    desc: 'تصاميم واقعية ثلاثية الأبعاد',
-    icon: '🎨',
-    features: ['3 ريال للمتر', 'تصاميم احترافية', 'معاينة واقعية'],
-    needsMeters: true,
-    pricePerMeter: 3
-  },
-  { 
-    name: '🏗️ تصميم مقاولات البناء', 
+    name: '🏗️  مقاولات البناء', 
     price: 95, 
     currency: 'ر.ع',
     desc: 'هندسة وتصميم للمقاولات',
@@ -487,12 +488,46 @@ onMounted(() => {
         </div>
       </div>
     </section>
+     <section class="packages">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-subtitle">باقات التصميم الهندسي</span>
+          <h2 class="section-title"> باقات تصميم الخرائط </h2>
+        </div>
+        <div class="packages-grid">
+          <div v-for="(pkg, index) in designPackages" :key="index" :class="['package-card', { popular: pkg.popular }]">
+            <div class="popular-badge" v-if="pkg.popular">⭐ الأكثر طلباً</div>
+            <div class="package-icon">{{ pkg.icon }}</div>
+            <h3 class="package-name">{{ pkg.name }}</h3>
+            <p class="package-desc">{{ pkg.desc }}</p>
+            <div class="package-price">
+              <span class="price-amount">{{ pkg.price }}</span>
+              <span class="price-unit">{{ pkg.currency }}</span>
+              <span class="price-period">/ المتر</span>
+            </div>
+            <div class="package-features">
+              <div v-for="(feature, idx) in pkg.features.slice(0, 3)" :key="idx" class="package-feature">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                  <path d="M20 6L9 17L4 12" stroke="#14b8a6" stroke-width="2"/>
+                </svg>
+                <span>{{ feature }}</span>
+              </div>
+              <div v-if="pkg.features.length > 3" class="package-feature more">
+                <span>+ {{ pkg.features.length - 3 }} ميزات</span>
+              </div>
+            </div>
+            <button class="package-order" @click="openOrderModal({...pkg, needsMeters: true, pricePerMeter: pkg.price})">اختر الباقة →</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- باقات التنفيذ والتصميم الداخلي -->
     <section class="implementation">
       <div class="container">
         <div class="section-header">
           <span class="section-subtitle">باقات التنفيذ والتصميم الداخلي</span>
-          <h2 class="section-title">باقات التصميم</h2>
+          <h2 class="section-title">باقات التنفيذ</h2>
         </div>
         <div class="impl-grid">
           <div v-for="(pkg, index) in implementationPackages" :key="index" class="impl-card">
@@ -523,40 +558,7 @@ onMounted(() => {
     </section>
 
     <!-- باقات التصميم الهندسي -->
-    <section class="packages">
-      <div class="container">
-        <div class="section-header">
-          <span class="section-subtitle">باقات التصميم الهندسي</span>
-          <h2 class="section-title">باقات الديكور</h2>
-        </div>
-        <div class="packages-grid">
-          <div v-for="(pkg, index) in designPackages" :key="index" :class="['package-card', { popular: pkg.popular }]">
-            <div class="popular-badge" v-if="pkg.popular">⭐ الأكثر طلباً</div>
-            <div class="package-icon">{{ pkg.icon }}</div>
-            <h3 class="package-name">{{ pkg.name }}</h3>
-            <p class="package-desc">{{ pkg.desc }}</p>
-            <div class="package-price">
-              <span class="price-amount">{{ pkg.price }}</span>
-              <span class="price-unit">{{ pkg.currency }}</span>
-              <span class="price-period">/ المتر</span>
-            </div>
-            <div class="package-features">
-              <div v-for="(feature, idx) in pkg.features.slice(0, 3)" :key="idx" class="package-feature">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                  <path d="M20 6L9 17L4 12" stroke="#14b8a6" stroke-width="2"/>
-                </svg>
-                <span>{{ feature }}</span>
-              </div>
-              <div v-if="pkg.features.length > 3" class="package-feature more">
-                <span>+ {{ pkg.features.length - 3 }} ميزات</span>
-              </div>
-            </div>
-            <button class="package-order" @click="openOrderModal({...pkg, needsMeters: true, pricePerMeter: pkg.price})">اختر الباقة →</button>
-          </div>
-        </div>
-      </div>
-    </section>
-
+   
     <!-- الخدمات الإضافية (الـ 9 كلها) -->
   
 
